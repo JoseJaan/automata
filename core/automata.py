@@ -47,3 +47,6 @@ class AutomataManager:
 
         self.automatas[automata_id] = Automata(automata_id, type, config)
         return self.automatas[automata_id]
+
+    def get_automata(self, automata_id):
+        return self.automatas.get(automata_id)

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automata</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Automata</h1>
+
+        <!-- Formulário para criar um autômato -->
+        <div class="form-container">
+            <h2>Criar Autômato</h2>
+            <form id="createAutomataForm">
+                <label for="type">Tipo de Autômato:</label>
+                <select id="type" name="type">
+                    <option value="DFA">DFA</option>
+                    <option value="NFA">NFA</option>
+                    <option value="DPDA">DPDA</option>
+                    <option value="DTM">DTM</option>
+                </select>
+
+                <label for="states">Estados (separados por vírgula):</label>
+                <input type="text" id="states" name="states" placeholder="Ex: q0,q1">
+
+                <label for="input_symbols">Símbolos de Entrada (separados por vírgula):</label>
+                <input type="text" id="input_symbols" name="input_symbols" placeholder="Ex: 0,1">
+
+                <label for="transitions">Transições (JSON):</label>
+                <textarea id="transitions" name="transitions" placeholder='Ex: {"q0": {"0": "q1", "1": "q0"}, "q1": {"0": "q0", "1": "q1"}}'></textarea>
+
+                <label for="initial_state">Estado Inicial:</label>
+                <input type="text" id="initial_state" name="initial_state" placeholder="Ex: q0">
+
+                <label for="final_states">Estados Finais (separados por vírgula):</label>
+                <input type="text" id="final_states" name="final_states" placeholder="Ex: q0">
+
+                <button type="submit">Criar Autômato</button>
+            </form>
+        </div>
+
+        <!-- Formulário para visualizar um autômato -->
+        <div class="form-container">
+            <h2>Visualizar Autômato</h2>
+            <form id="getAutomataForm">
+                <label for="automata_id">ID do Autômato:</label>
+                <input type="text" id="automata_id" name="automata_id" placeholder="Digite o ID">
+                <button type="submit">Buscar Autômato</button>
+            </form>
+        </div>
+
+        <!-- Resultado da criação ou busca do autômato -->
+        <div id="result" class="result-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
