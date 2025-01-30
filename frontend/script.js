@@ -34,7 +34,6 @@ document.getElementById('createAutomataForm').addEventListener('submit', functio
 });
 
 // Adiciona funcionalidade para buscar um autômato pelo ID
-
 document.getElementById('getAutomataForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -53,6 +52,7 @@ document.getElementById('getAutomataForm').addEventListener('submit', function (
             <p><strong>ID:</strong> ${data.id}</p>
             <p><strong>Tipo:</strong> ${data.type}</p>
             <p><strong>Configuração:</strong> <pre>${JSON.stringify(data.config, null, 2)}</pre></p>
+            <img src="http://localhost:8000/automata/${data.id}/image" alt="Visualização do Autômato" style="max-width:100%; margin-top: 10px;">
         `;
     })
     .catch(error => {

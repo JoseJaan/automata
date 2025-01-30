@@ -5,6 +5,10 @@ from automata.tm.dtm import DTM
 
 def visualize_automata(automata):
     if isinstance(automata, (DFA, NFA, DPDA, DTM)):
-        return automata.show_diagram()
+        try:
+            diagram = automata.show_diagram()
+            return diagram
+        except AttributeError:
+            raise ValueError(f"The automaton of type {type(automata).__name__} does not support diagram visualization.")
     else:
-        raise ValueError("Unsupported automata type for visualization")
+        raise ValueError("Unsupported automaton type for visualization")
