@@ -41,6 +41,27 @@
             </form>
         </div>
 
+        <!-- Formulário para visualizar um autômato -->
+        <div class="form-container">
+            <h2>Visualizar Autômato</h2>
+
+        </div>
+
+        <!-- Resultado da criação ou busca do autômato -->
+        <div id="result" class="result-container"></div>
+
+
+        <!-- Formulário para verificar uma string -->
+        <div class="form-container">
+            <h2>Verificar String</h2>
+            <form id="validateStringForm">
+                <label for="inputString">String de Entrada:</label>
+                <input type="text" id="inputString" name="inputString" placeholder="Ex: 101">
+                <button type="submit">Verificar</button>
+            </form>
+            <div id="validationResult" class="result-container"></div>
+        </div>
+
     </div>
 
     <script src="/static/script.js"></script>

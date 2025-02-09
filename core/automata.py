@@ -9,6 +9,46 @@ class Automata:
         self.id = id
         self.type = type
         self.config = config
+        
+        # Create the actual automaton instance
+        if type == "DFA":
+            self.instance = DFA(
+                states=config["states"],
+                input_symbols=config["input_symbols"],
+                transitions=config["transitions"],
+                initial_state=config["initial_state"],
+                final_states=config["final_states"]
+            )
+        elif type == "NFA":
+            self.instance = NFA(
+                states=config["states"],
+                input_symbols=config["input_symbols"],
+                transitions=config["transitions"],
+                initial_state=config["initial_state"],
+                final_states=config["final_states"]
+            )
+        elif type == "DPDA":
+            self.instance = DPDA(**config)
+        elif type == "DTM":
+            self.instance = DTM(**config)
+        else:
+            raise ValueError("Invalid automata type")
+        
+    def validate_string(self, input_string):
+        try:
+            if self.type in ["DFA", "NFA"]:
+                return self.instance.accepts_input(input_string)
+            elif self.type == "DPDA":
+                return self.instance.accepts_input(input_string)
+            elif self.type == "DTM":
+                return self.instance.accepts_input(input_string)
+            else:
+                raise ValueError(f"Validation not implemented for type {self.type}")
+        except Exception as e:
+            raise ValueError(f"Error validating string: {str(e)}")
+
+    def show_diagram(self):
+        return self.instance.show_diagram()
 
 class AutomataManager:
     def __init__(self):
@@ -22,31 +62,9 @@ class AutomataManager:
         config["input_symbols"] = set(config["input_symbols"])
         config["final_states"] = set(config["final_states"])
 
-        if type == "DFA":
-            automata = DFA(
-                states=config["states"],
-                input_symbols=config["input_symbols"],
-                transitions=config["transitions"],
-                initial_state=config["initial_state"],
-                final_states=config["final_states"]
-            )
-        elif type == "NFA":
-            automata = NFA(
-                states=config["states"],
-                input_symbols=config["input_symbols"],
-                transitions=config["transitions"],
-                initial_state=config["initial_state"],
-                final_states=config["final_states"]
-            )
-        elif type == "DPDA":
-            automata = DPDA(**config)
-        elif type == "DTM":
-            automata = DTM(**config)
-        else:
-            raise ValueError("Invalid automata type")
-
-        self.automatas[automata_id] = Automata(automata_id, type, config)
-        return self.automatas[automata_id]
+        automata = Automata(automata_id, type, config)
+        self.automatas[automata_id] = automata
+        return automata
 
     def get_automata(self, automata_id):
         return self.automatas.get(automata_id)
