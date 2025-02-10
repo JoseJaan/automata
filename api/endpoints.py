@@ -14,7 +14,7 @@ automata_manager = AutomataManager()
 data_dir = "automata_images"
 os.makedirs(data_dir, exist_ok=True) 
 
-last_automata = None  # Armazena o último autômato criado
+last_automata = None 
 
 @router.post("/create", response_model=AutomataResponse)
 async def create_automata(request: AutomataCreateRequest):
@@ -37,7 +37,6 @@ async def create_automata(request: AutomataCreateRequest):
 
         last_automata = automata_manager.create_automata(request.type, request.config.dict())
 
-        # Gerar e salvar imagem do autômato
         image_path = os.path.join(data_dir, f"{last_automata.id}")
         image_file = last_automata.generate_image(image_path)
 
@@ -54,14 +53,6 @@ async def create_automata(request: AutomataCreateRequest):
         print("Error:", str(e))
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
-        
-@router.get("/{automata_id}", response_model=AutomataResponse)
-def get_automata(automata_id: str):
-    automata = automata_manager.get_automata(automata_id)
-    if not automata:
-        raise HTTPException(status_code=404, detail="Automata not found")
-    return AutomataResponse(id=automata.id, type=automata.type, config=automata.config)
-
 @router.get("/image/{automata_id}")
 async def get_automata_image(automata_id: str):
     print("get_automata_image",automata_id)
@@ -74,7 +65,7 @@ async def get_automata_image(automata_id: str):
 
 @router.post("/validate")
 def validate_string(request: StringValidationRequest):
-    print("Received request:", request)  # Add this line
+    print("Received request:", request) 
     global last_automata
     if not last_automata:
         raise HTTPException(status_code=400, detail="Nenhum autômato criado ainda")
