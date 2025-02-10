@@ -16,5 +16,6 @@ class AutomataResponse(BaseModel):
     id: str
     type: str
     config: Dict[str, Any]
+    image_url: str  # Nova chave para a URL da imagem
 class StringValidationRequest(BaseModel):
     input_string: str

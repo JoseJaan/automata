@@ -18,12 +18,11 @@ last_automata = None  # Armazena o último autômato criado
 
 @router.post("/create", response_model=AutomataResponse)
 async def create_automata(request: AutomataCreateRequest):
-    global last_automata  # Adicione esta linha para atualizar a variável global
+    global last_automata  
 
     try:
-        print("Received request:", request.dict())  # Debug log
-        
-        # Validação adicional
+        print("Received request:", request.dict())  
+
         if not request.config.states:
             raise ValueError("States list cannot be empty")
         if not request.config.input_symbols:
@@ -35,18 +34,24 @@ async def create_automata(request: AutomataCreateRequest):
         for final_state in request.config.final_states:
             if final_state not in request.config.states:
                 raise ValueError(f"Final state {final_state} must be in states list")
-        
-        last_automata = automata_manager.create_automata(request.type, request.config.dict())  # Atualiza last_automata
 
-        return AutomataResponse(
-            id=last_automata.id,
-            type=last_automata.type,
-            config=last_automata.config
-        )
+        last_automata = automata_manager.create_automata(request.type, request.config.dict())
+
+        # Gerar e salvar imagem do autômato
+        image_path = os.path.join(data_dir, f"{last_automata.id}")
+        image_file = last_automata.generate_image(image_path)
+
+        return {
+            "id": last_automata.id,
+            "type": last_automata.type,
+            "config": last_automata.config,
+            "image_url": f"http://localhost:8000/automata/image/{last_automata.id}"
+        }
+
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        print("Error:", str(e))  # Debug log
+        print("Error:", str(e))
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
         
@@ -57,21 +62,15 @@ def get_automata(automata_id: str):
         raise HTTPException(status_code=404, detail="Automata not found")
     return AutomataResponse(id=automata.id, type=automata.type, config=automata.config)
 
-@router.get("/{automata_id}/image")
-def get_automata_image(automata_id: str):
-    automata = automata_manager.get_automata(automata_id)
-    if not automata:
-        raise HTTPException(status_code=404, detail="Automata not found")
+@router.get("/image/{automata_id}")
+async def get_automata_image(automata_id: str):
+    print("get_automata_image",automata_id)
+    image_path = os.path.join(data_dir, f"{automata_id}.png")
+    
+    if not os.path.exists(image_path):
+        raise HTTPException(status_code=404, detail="Imagem não encontrada")
 
-    image_stream = BytesIO()
-    try:
-        diagram = automata.show_diagram()
-        diagram.write_png(image_stream) 
-        image_stream.seek(0)
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-    return StreamingResponse(image_stream, media_type="image/png")
+    return FileResponse(image_path, media_type="image/png")
 
 @router.post("/validate")
 def validate_string(request: StringValidationRequest):

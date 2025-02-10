@@ -1,7 +1,6 @@
 document.getElementById('createAutomataForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    // Parse as transições como JSON
     let transitions;
     try {
         transitions = JSON.parse(document.getElementById('transitions').value);
@@ -23,8 +22,6 @@ document.getElementById('createAutomataForm').addEventListener('submit', functio
         }
     };
 
-    console.log('Sending data:', formData);  // Debug log
-
     fetch('http://localhost:8000/automata/create', {
         method: 'POST',
         headers: {
@@ -40,9 +37,11 @@ document.getElementById('createAutomataForm').addEventListener('submit', functio
     })
     .then(data => {
         document.getElementById('result').innerHTML = `
-            <h2>Autômato Criado com Sucesso!</h2>
+            <h2>Autômato Criado sem Sucesso!</h2>
             <p><strong>Tipo:</strong> ${data.type}</p>
             <p><strong>Configuração:</strong> <pre>${JSON.stringify(data.config, null, 2)}</pre></p>
+            <h3>Imagem do Autômato:</h3>
+            <img src="${data.image_url}" alt="Imagem do autômato gerado" style="max-width: 100%; border: 1px solid #ccc;" />
         `;
     })
     .catch(error => {
@@ -52,6 +51,7 @@ document.getElementById('createAutomataForm').addEventListener('submit', functio
         `;
     });
 });
+
 
 document.getElementById('validateStringForm').addEventListener('submit', function (event) {
     event.preventDefault();

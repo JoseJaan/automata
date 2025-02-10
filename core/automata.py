@@ -3,14 +3,15 @@ from automata.fa.nfa import NFA
 from automata.pda.dpda import DPDA
 from automata.tm.dtm import DTM
 import uuid
+import os
+import pygraphviz as pgv
 
 class Automata:
     def __init__(self, id, type, config):
         self.id = id
         self.type = type
         self.config = config
-        
-        # Create the actual automaton instance
+
         if type == "DFA":
             self.instance = DFA(
                 states=config["states"],
@@ -46,6 +47,14 @@ class Automata:
                 raise ValueError(f"Validation not implemented for type {self.type}")
         except Exception as e:
             raise ValueError(f"Error validating string: {str(e)}")
+    
+    def generate_image(self, save_path):
+        try:
+            diagram = self.instance.show_diagram()
+            diagram.draw(f"{save_path}.png", prog='dot', format='png')
+            return f"{save_path}.png"
+        except Exception as e:
+            raise ValueError(f"Erro ao gerar imagem do autômato: {str(e)}")
 
     def show_diagram(self):
         return self.instance.show_diagram()

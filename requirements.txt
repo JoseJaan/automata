@@ -2,3 +2,5 @@ fastapi
 uvicorn
 automata-lib
 graphviz
+coloraide
+pygraphviz
