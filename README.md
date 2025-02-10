@@ -1,8 +1,9 @@
 ## 🎯 Sobre
 - API em Python desenvolvida com FastAPI que realiza operações com autômatos utilizando a biblioteca automata.
+- Autômatos do tipo DPDA e DTM não possuem integração com o frontend, portanto, devem ser testados requisitando diretamente o backend, utilizando tecnologias como Postman, Insomnia ou APIdog.
 
 ## 💻 Como rodar
-1. É necessário possuir o `graphviz` instalado, portanto execute no terminal:
+1. É necessário possuir o `graphviz` instalado, portanto, execute no terminal:
     ```bash
     sudo apt update
     sudo apt install graphviz graphviz-dev
