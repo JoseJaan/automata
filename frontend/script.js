@@ -41,7 +41,6 @@ document.getElementById('createAutomataForm').addEventListener('submit', functio
     .then(data => {
         document.getElementById('result').innerHTML = `
             <h2>Autômato Criado com Sucesso!</h2>
-            <p><strong>ID:</strong> ${data.id}</p>
             <p><strong>Tipo:</strong> ${data.type}</p>
             <p><strong>Configuração:</strong> <pre>${JSON.stringify(data.config, null, 2)}</pre></p>
         `;

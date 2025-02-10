@@ -18,6 +18,8 @@ last_automata = None  # Armazena o último autômato criado
 
 @router.post("/create", response_model=AutomataResponse)
 async def create_automata(request: AutomataCreateRequest):
+    global last_automata  # Adicione esta linha para atualizar a variável global
+
     try:
         print("Received request:", request.dict())  # Debug log
         
@@ -34,7 +36,8 @@ async def create_automata(request: AutomataCreateRequest):
             if final_state not in request.config.states:
                 raise ValueError(f"Final state {final_state} must be in states list")
         
-        last_automata = automata_manager.create_automata(request.type, request.config.dict())
+        last_automata = automata_manager.create_automata(request.type, request.config.dict())  # Atualiza last_automata
+
         return AutomataResponse(
             id=last_automata.id,
             type=last_automata.type,
@@ -45,6 +48,7 @@ async def create_automata(request: AutomataCreateRequest):
     except Exception as e:
         print("Error:", str(e))  # Debug log
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
         
 @router.get("/{automata_id}", response_model=AutomataResponse)
 def get_automata(automata_id: str):
